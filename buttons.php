@@ -1,85 +1,83 @@
 <?php
 
-use Monolog\Handler\FirePHPHandler;
+use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 
 require_once dirname(__FILE__) . '/vendor/autoload.php';
-// Create the logger
 
-
-//// You can now use your logger
-//$info->info('pikou');
-//$warning->warning('Bar');
-//$emergency->emergency('info loggggsfdsefs');
 
 $getter = $_GET['type'];
 $message = $_GET['message'];
+
+$debug = new Logger('DEBUG->');
+$info = new Logger('INFO->');
+$notice = new Logger('NOTICE->');
+$warning = new Logger('WARNING-->');
+$error = new Logger('ERROR-->');
+$critical = new Logger('CRITICAL-->');
+$alert = new Logger('ALERT-->');
+$emergency = new Logger('EMERGENCY!---->');
 
 switch ($getter) {
 
     case 'DEBUG':
 
-        $debug = new Logger('DEBUG->');
-        $debug->pushHandler(new StreamHandler(__DIR__ . '/logs/info.log', Logger::INFO));
-        $debug->pushHandler(new \Monolog\Handler\BrowserConsoleHandler(Logger::INFO));
-        $info->debug('test');
+
+        $debug->pushHandler(new StreamHandler(__DIR__ . '/logs/info.log', Logger::DEBUG));
+        $debug->pushHandler(new BrowserConsoleHandler(Logger::DEBUG));
+        $debug->debug($message);
         break;
 
     case 'INFO':
-        $info = new Logger('INFO->');
+
         $info->pushHandler(new StreamHandler(__DIR__ . '/logs/info.log', Logger::INFO));
-        $info->pushHandler(new FirePHPHandler());
+        $info->pushHandler(new BrowserConsoleHandler(Logger::INFO));
         $info->info($message);
         break;
 
     case 'NOTICE':
-        $notice = new Logger('NOTICE->');
+
         $notice->pushHandler(new StreamHandler(__DIR__ . '/logs/info.log', Logger::INFO));
-        $notice->pushHandler(new FirePHPHandler());
+        $notice->pushHandler(new BrowserConsoleHandler(Logger::NOTICE));
         $notice->notice($message);
         break;
 
     case 'WARNING':
-        $warning = new Logger('WARNING-->');
-        // warning handler
+
         $warning->pushHandler(new StreamHandler(__DIR__ . '/logs/warning.log', Logger::WARNING));
-        $warning->pushHandler(new FirePHPHandler());
+        $warning->pushHandler(new BrowserConsoleHandler(Logger::WARNING));
         $warning->warning($message);
         break;
 
     case 'ERROR':
-        $error = new Logger('ERROR-->');
-        // warning handler
+
         $error->pushHandler(new StreamHandler(__DIR__ . '/logs/warning.log', Logger::ERROR));
-        $error->pushHandler(new FirePHPHandler());
+        $error->pushHandler(new BrowserConsoleHandler(Logger::ERROR));
         $error->error($message);
-  
         break;
 
     case 'CRITICAL':
-        $critical = new Logger('CRITICAL-->');
-        // warning handler
+
         $critical->pushHandler(new StreamHandler(__DIR__ . '/logs/warning.log', Logger::CRITICAL));
-        $critical->pushHandler(new FirePHPHandler());
+        $critical->pushHandler(new BrowserConsoleHandler(Logger::CRITICAL));
         $critical->critical($message);
         break;
 
     case 'ALERT':
-        $alert = new Logger('ALERT-->');
-        // warning handler
+
         $alert->pushHandler(new StreamHandler(__DIR__ . '/logs/warning.log', Logger::ALERT));
-        $alert->pushHandler(new FirePHPHandler());
+        $alert->pushHandler(new BrowserConsoleHandler(Logger::ALERT));
         $alert->alert($message);
         break;
 
     case 'EMERGENCY':
 
-        $emergency = new Logger('EMERGENCY!---->');
         $emergency->pushHandler(new StreamHandler(__DIR__ . '/logs/emergency.log', Logger::EMERGENCY));
-        $emergency->pushHandler(new FirePHPHandler());
+        $emergency->pushHandler(new BrowserConsoleHandler(Logger::EMERGENCY));
         $emergency->emergency($message);
+
         break;
 
 }
