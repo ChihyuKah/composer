@@ -9,37 +9,79 @@ require_once dirname(__FILE__) . '/vendor/autoload.php';
 // Create the logger
 
 
-$emergency = new Logger('EMERGENCY!---->');
-$emergency->pushHandler(new StreamHandler(__DIR__ . '/logs/emergency.log', Logger::EMERGENCY));
-$emergency->pushHandler(new FirePHPHandler());
-// You can now use your logger
-$info->info('pikou');
-$warning->warning('Bar');
-$emergency->emergency('info loggggsfdsefs');
+//// You can now use your logger
+//$info->info('pikou');
+//$warning->warning('Bar');
+//$emergency->emergency('info loggggsfdsefs');
 
 $getter = $_GET['type'];
-echo $getter;
+$message = $_GET['message'];
 
-switch ($_GET['type']) {
+switch ($getter) {
 
     case 'DEBUG':
-        $info = new Logger('INFO->');
-        $info->pushHandler(new StreamHandler(__DIR__ . '/logs/info.log', Logger::INFO));
-        $info->pushHandler(new \Monolog\Handler\BrowserConsoleHandler(Logger::INFO));
+
+        $debug = new Logger('DEBUG->');
+        $debug->pushHandler(new StreamHandler(__DIR__ . '/logs/info.log', Logger::INFO));
+        $debug->pushHandler(new \Monolog\Handler\BrowserConsoleHandler(Logger::INFO));
+        $info->debug('test');
         break;
 
     case 'INFO':
-        $warning = new Logger('WARNING!--->');
+        $info = new Logger('INFO->');
+        $info->pushHandler(new StreamHandler(__DIR__ . '/logs/info.log', Logger::INFO));
+        $info->pushHandler(new FirePHPHandler());
+        $info->info($message);
+        break;
+
+    case 'NOTICE':
+        $notice = new Logger('NOTICE->');
+        $notice->pushHandler(new StreamHandler(__DIR__ . '/logs/info.log', Logger::INFO));
+        $notice->pushHandler(new FirePHPHandler());
+        $notice->notice($message);
+        break;
+
+    case 'WARNING':
+        $warning = new Logger('WARNING-->');
         // warning handler
         $warning->pushHandler(new StreamHandler(__DIR__ . '/logs/warning.log', Logger::WARNING));
         $warning->pushHandler(new FirePHPHandler());
+        $warning->warning($message);
+        break;
 
-    case 'NOTICE':
-    case 'WARNING':
     case 'ERROR':
+        $error = new Logger('ERROR-->');
+        // warning handler
+        $error->pushHandler(new StreamHandler(__DIR__ . '/logs/warning.log', Logger::ERROR));
+        $error->pushHandler(new FirePHPHandler());
+        $error->error($message);
+  
+        break;
+
     case 'CRITICAL':
+        $critical = new Logger('CRITICAL-->');
+        // warning handler
+        $critical->pushHandler(new StreamHandler(__DIR__ . '/logs/warning.log', Logger::CRITICAL));
+        $critical->pushHandler(new FirePHPHandler());
+        $critical->critical($message);
+        break;
+
     case 'ALERT':
+        $alert = new Logger('ALERT-->');
+        // warning handler
+        $alert->pushHandler(new StreamHandler(__DIR__ . '/logs/warning.log', Logger::ALERT));
+        $alert->pushHandler(new FirePHPHandler());
+        $alert->alert($message);
+        break;
+
     case 'EMERGENCY':
+
+        $emergency = new Logger('EMERGENCY!---->');
+        $emergency->pushHandler(new StreamHandler(__DIR__ . '/logs/emergency.log', Logger::EMERGENCY));
+        $emergency->pushHandler(new FirePHPHandler());
+        $emergency->emergency($message);
+        break;
+
 }
 
 ?>
